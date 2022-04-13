@@ -9,6 +9,10 @@
 */
 
 /* ---- Base Rules ---- */
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -93,6 +97,10 @@ section {
   transition: ease 0.3s all;
 }
 
+.navbar__menu .activeNv {
+  background-color: orange;
+}
+
 /* Header Styles */
 .page__header {
   background: #fff;
@@ -159,6 +167,13 @@ section {
   .landing__container {
     max-width: 50em;
     padding: 4em;
+  }
+}
+
+@media screen and (max-width: 44em) {
+  .navbar__menu li {
+    text-align: center;
+    width: 100%;
   }
 }
 
