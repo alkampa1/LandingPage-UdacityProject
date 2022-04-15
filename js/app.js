@@ -29,18 +29,19 @@ const bkTopBtn = document.getElementById("bkTopBtn");
  *
  */
 navBuilder = () => {
-  for (let i = 0; i < sections.length; i++) {
+  for (let section of sections) {
     // creates the li and a tags.
     let li = document.createElement("li");
     let anchor = document.createElement("a");
 
     // Gets the attributes from the sections for the name and link of the nav
-    let name = sections[i].getAttribute("data-nav");
-    let link = sections[i].getAttribute("id");
+    let name = section.getAttribute("data-nav");
+    let link = section.getAttribute("id");
 
     // creates the nav by settings the attributes, adding the class and appending the anchor tag to the li
     anchor.setAttribute("href", "#" + link);
-    anchor.className += "menu__link";
+    anchor.classList.add(link);
+    anchor.className += " menu__link";
     anchor.innerHTML = name;
     li.appendChild(anchor);
 
@@ -55,10 +56,16 @@ navBuilder = () => {
 activeSection = () => {
   for (let section of sections) {
     let box = section.getBoundingClientRect();
+
+    const id = section.getAttribute("id");
+    const nav = navList.querySelector(`.${id}`);
+
     if (box.top <= 150 && box.bottom >= 150) {
       section.classList.add("your-active-class");
+      nav.classList.add("activeNv");
     } else {
       section.classList.remove("your-active-class");
+      nav.classList.remove("activeNv");
     }
   }
 };
@@ -74,44 +81,6 @@ ScrollToAchor = () => {
       sect.scrollIntoView({
         behavior: "smooth",
       });
-    });
-  }
-};
-
-/**
- * End Main Functions
- * Begin Events and function calls
- *
- */
-
-// Build Navigation
-navBuilder();
-
-// Scroll to Anchor
-ScrollToAchor();
-
-// Section Active State
-document.addEventListener("scroll", activeSection);
-
-/**
- *  Additional features
- *
- */
-
-/**
- * @desc add class 'active' to nav menu
- */
-activeNav = () => {
-  let links = navList.querySelectorAll("li");
-  for (let link of links) {
-    link.addEventListener("click", function (e) {
-      //e.preventDefault(); --- Removing because preventDefault() stops the scroll to section event. Using stopImmediatePropagation() instead.
-      e.stopImmediatePropagation();
-      let prev = document.getElementsByClassName("activeNv");
-      if (prev && prev[0]) {
-        prev[0].classList.remove("activeNv");
-      }
-      this.classList.add("activeNv");
     });
   }
 };
@@ -149,8 +118,23 @@ backToTop = () => {
   });
 };
 
-// Active top navigation
-activeNav();
+/**
+ * End Main Functions
+ * Begin Events and function calls
+ *
+ */
+
+// Build Navigation
+navBuilder();
+
+// Scroll to Anchor
+ScrollToAchor();
+
+// Section Active State
+document.addEventListener("scroll", function (e) {
+  e.preventDefault();
+  activeSection();
+});
 
 // scroll to top button
 backToTop();
